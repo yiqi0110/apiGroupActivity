@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+        <style type='text/css'>
+        .header {
+            color: white;
+            background-color: darkblue;
+            padding: 70px;
+
+        }
+
+        .font {
+            font-size: 30px;
+            float: left;
+            left: 35%;
+            position: relative;
+        }
+
+        .box1 {
+            border: 2px solid lightgrey;
+            background-color: lightgrey;
+        }
+
+        .box {
+            border: 2px solid lightgrey;
+        }
+
+        .btn {
+            background-color: white;
+        }
+
+        .articles {
+            border: 2px solid lightgrey;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header row">
+            <h1 class="font">New York Times Search</h1>
+        </div>
+        <br>
+        
+        <form class="box col">
+            <div class="box1 row">
+                <h2 class="col">Search Parameters</h2>
+                
+            </div>
+            <div class="form-group">
+                <label for="Search">Search term:</label>
+                <input type="text" class="form-control" id="input1">
+            </div>
+            <div class="form-group">
+                <label for="_select1">Number of records to retrieve:</label>
+                <select class="form-control" id="select1">
+                    <option>1</option>
+                    <option>5</option>
+                    <option>10</option>
+                    
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="select2">Start Year (optional):</label>
+                <input type="text" class="form-control" id="select2">
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="select3">End Year (optional):</label>
+            <input type="text" class="form-control" id="select3">
+            
+        </select>
+    </div>
+    <div class="row">
+        <input type="submit" class="search btn"></input>
+        <button class="btn">Clear Results</button>
+    </div>
+    
+</form>
+<br>
+<div class="articles row">
+    <h3>Top articles</h3>
+    <hr>
+    <div class="empty"></div>
+</div>
+<br>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+            // Initial array of movies
+            // Built by LucyBot. www.lucybot.com
+
+
+            var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+            var response = [];
+            var tableData;
+            var tableRow;
+
+            $('.search').on('click', function (event) {
+                console.log('this is working');
+                event.preventDefault();
+                console.log($('#select1').val());
+
+                var searchInput = $('#input1').val();
+                console.log(searchInput);
+
+                url += '?' + $.param({
+                    'api-key': "21bf1c44dbcb4cb7be3bc583912fbea2",
+                    'fq': searchInput
+                });
+
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+
+                }).done(function (result) {
+                    response = result.response.docs
+                    console.log(response);
+
+                    for (i = 0; i < response.length; i++) {
+                        var link = $('<a>').attr('href', response[i].web_url).text(response[i].headline
+                            .main);
+                        tableData = $('<td>').html(link);
+                        tableRow = $('<tr>').html(tableData);
+                        $('.empty').append(tableRow);
+                    }
+
+
+                }).fail(function (err) {
+                    throw err;
+                })
+
+            });
+        </script>
+
+</body>
+
+</html>
